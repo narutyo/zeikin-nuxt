@@ -9,19 +9,48 @@
     >
       <v-list>
         <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
+          to="/"
           router
           exact
         >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
+          <v-list-item-icon>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-title>Home</v-list-item-title>
         </v-list-item>
+        <v-list-group
+          :value="true"
+          prepend-icon="mdi-account-circle"
+        >
+          <template v-slot:activator>
+            <v-list-item-title>都道府県別</v-list-item-title>
+          </template>
+
+          <v-list-group
+            v-for="(prefData, index) in prefMenu"
+            :key="index"
+            no-action
+            sub-group
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>{{prefData.title}}</v-list-item-title>
+              </v-list-item-content>
+            </template>
+
+            <v-list-item
+              v-for="(pref, i) in prefData.children"
+              :key="i"
+              :to="pref.to"
+              router
+              exact
+            >
+              <v-list-item-title v-text="pref.name"></v-list-item-title>
+            </v-list-item>
+          </v-list-group>
+
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -91,27 +120,53 @@
 <script>
 export default {
   name: 'DefaultLayout',
-  data () {
+  data (context) {
     return {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
+      prefectureList: [],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: context.$config.title,
+
+      prefMenu: []
+    }
+  },
+  async mounted () {
+    await this.getPrefecture()
+  },
+  methods: {
+    async getPrefecture () {
+      const prefData = await this.$axios.$get('Prefectures!A:D')
+
+      const yearList = prefData.values.filter((item, index, self) => {
+        const tmp = self.map(item => item[1])
+        if (tmp.indexOf(item[1]) === index) {
+          return item[1]
+        }
+        return ''
+      })
+
+      yearList.forEach((element) => {
+        if (!isNaN(element[1])) {
+          const children = prefData.values.map((item, index) => {
+            if (item[1] === element[1]) {
+              return {
+                to: '/prefecture/' + index,
+                name: item[3]
+              }
+            }
+            return ''
+          }).filter(v => v)
+
+          this.prefMenu.push({
+            title: element[1] + '年',
+            children
+          })
+        }
+      })
     }
   }
 }

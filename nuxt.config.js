@@ -3,8 +3,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - zeikin-nuxt',
-    title: 'zeikin-nuxt',
+    titleTemplate: '%s - ' + process.env.TITLE,
+    title: process.env.TITLE,
     htmlAttrs: {
       lang: 'en'
     },
@@ -16,7 +16,8 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    ],
+    script: [{ src: "https://apis.google.com/js/api.js" }]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -25,6 +26,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~plugins/axios',
+    '~plugins/const',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -41,35 +44,79 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    'nuxt-webfontloader',
+    '@nuxtjs/axios',
+    '@nuxtjs/dotenv',
+    '@nuxtjs/toast',
+    '@nuxtjs/auth-next',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/'
+    baseURL: process.env.SHEET_URL
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ["~/assets/variables.scss"],
+    defaultAssets: {
+      font: false,
+    },
+    treeShake: true,
     theme: {
-      dark: true,
+      dark: false,
       themes: {
+        light: {
+          primary: colors.blue,
+          secondary: "#304156",
+          success: colors.green,
+          danger: colors.red,
+          warning: colors.deepOrange,
+          info: colors.indigo,
+
+          dark: "#242939",
+
+          background: "#f2f3f8"
+        },
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
+          primary: colors.blue,
+          secondary: "#304156",
+          success: colors.green,
+          danger: colors.red,
+          warning: colors.deepOrange,
+          info: colors.indigo
         }
       }
     }
   },
+  webfontloader: {
+    google: {
+      families: ['Archivo:400;500;600;700'],
+    },
+  },
+  toast: {
+    position: 'top-right',
+    duration: 5000,
+  },
+
+  publicRuntimeConfig: {
+    homeUrl: process.env.HOME_URL,
+    title: process.env.TITLE,
+    clientEmail: process.env.CLIENT_EMAIL,
+    privateKey: process.env.PRIVATE_KEY,
+    apiKey: process.env.API_KEY,
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extend (config, ctx) {
+      config.node = {
+        fs: 'empty',
+        googleapis: 'empty',
+        child_process: 'empty',
+      }
+    }
+
   }
 }
