@@ -103,8 +103,6 @@ export default {
   publicRuntimeConfig: {
     homeUrl: process.env.HOME_URL,
     title: process.env.TITLE,
-    clientEmail: process.env.CLIENT_EMAIL,
-    privateKey: process.env.PRIVATE_KEY,
     apiKey: process.env.API_KEY,
   },
 

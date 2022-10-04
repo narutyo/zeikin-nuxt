@@ -2,14 +2,24 @@ import Vue from 'vue'
 
 export default ({ app }) => {
   Vue.prototype.$const = {
+    groupSetting: {
+      1: '安全・安心の確保',
+      2: '健康づくり',
+      3: '教育',
+      4: '福祉',
+      5: 'まちづくり',
+      6: '経済の成長・安定',
+      7: '総務的経費'
+    },
     expenditure: {
-      2020: {
+      prefecture: {
         delay: 4,
         stracture: {
           // 0: '歳出総額',
-          1: { name: '議会費' },
+          1: { name: '議会費', group: 7 },
           2: {
             name: '総務費',
+            group: 7,
             child: {
               3: { name: '総務管理費' },
               4: { name: '企画費' },
@@ -24,6 +34,7 @@ export default ({ app }) => {
           },
           12: {
             name: '民生費',
+            group: 4,
             child: {
               13: { name: '社会福祉費' },
               14: { name: '老人福祉費' },
@@ -34,6 +45,7 @@ export default ({ app }) => {
           },
           18: {
             name: '衛生費',
+            group: 2,
             child: {
               19: { name: '公衆衛生費' },
               20: { name: '結核対策費' },
@@ -46,6 +58,7 @@ export default ({ app }) => {
           },
           26: {
             name: '労働費',
+            group: 6,
             child: {
               27: { name: '労政費' },
               28: { name: '職業訓練費' },
@@ -55,6 +68,7 @@ export default ({ app }) => {
           },
           31: {
             name: '農林水産業費',
+            group: 6,
             child: {
               32: { name: '農業費' },
               33: { name: '畜産業費' },
@@ -65,6 +79,7 @@ export default ({ app }) => {
           },
           37: {
             name: '商工費',
+            group: 6,
             child: {
               38: { name: '商業費' },
               39: { name: '工鉱業費' },
@@ -74,12 +89,13 @@ export default ({ app }) => {
           41: {
             name: '土木費',
             child: {
-              42: { name: '土木管理費' },
-              43: { name: '道路橋りょう費' },
-              44: { name: '河川海岸費' },
-              45: { name: '港湾費' },
+              42: { name: '土木管理費', group: 5 },
+              43: { name: '道路橋りょう費', group: 6 },
+              44: { name: '河川海岸費', group: 5 },
+              45: { name: '港湾費', group: 6 },
               46: {
                 name: '都市計画費',
+                group: 5,
                 child: {
                   47: { name: '街路費' },
                   48: { name: '公園費' },
@@ -87,14 +103,15 @@ export default ({ app }) => {
                   50: { name: '区画整理費等' }
                 }
               },
-              51: { name: '住宅費' },
-              52: { name: '空港費' }
+              51: { name: '住宅費', group: 5 },
+              52: { name: '空港費', group: 6 }
             }
           },
           53: { name: '警察費' },
-          54: { name: '消防費' },
+          54: { name: '消防費', group: 1 },
           55: {
             name: '教育費',
+            group: 3,
             child: {
               56: { name: '教育総務費' },
               57: { name: '小学校費' },
@@ -115,6 +132,7 @@ export default ({ app }) => {
           },
           67: {
             name: '災害復旧費',
+            group: 1,
             child: {
               68: {
                 name: '農林水産施設',
@@ -151,15 +169,15 @@ export default ({ app }) => {
               }
             }
           },
-          89: { name: '公債費' },
+          89: { name: '公債費', group: 7 },
           90: {
             name: '諸支出金',
             child: {
-              91: { name: '普通財産取得費' },
+              91: { name: '普通財産取得費', group: 7 },
               92: { name: '公営企業費' }
             }
           },
-          93: { name: '前年度繰上充用金' },
+          93: { name: '前年度繰上充用金', group: 7 },
           94: { name: '利子割交付金' },
           95: { name: '配当割交付金' },
           96: { name: '株式等譲渡所得割交付金' },
