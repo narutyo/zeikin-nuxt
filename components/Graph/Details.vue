@@ -37,8 +37,7 @@ export default {
   watch: {
     'dialog' (to, from) {
       if (to) {
-        this.printItems = []
-        this.conv(this.items)
+        this.printItems = this.conv(this.items)
       }
     }
   },
@@ -50,14 +49,23 @@ export default {
     })
   },
   methods: {
-    conv (arr) {
-      arr.forEach((element) => {
+    conv (arr, parent = null) {
+      return arr.map((element) => {
         if (element.group === this.group) {
-          this.printItems.push(element)
+          return element
         } else if (element.children) {
-          this.conv(element.children)
+          const child = this.conv(element.children)
+          if (child.length > 0) {
+            const cloned = Object.assign(element)
+            const cost = child.reduce((sum, item) => sum + Number(item.cost), 0)
+            cloned.cost = cost
+            cloned.name = element.title + ':' + cost
+            cloned.children = child
+            return cloned
+          }
         }
-      })
+        return null
+      }).filter(v => v)
     }
   }
 }

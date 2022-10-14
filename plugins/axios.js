@@ -12,6 +12,6 @@ export default ({ $axios, $config }) => {
   // エラーログ
   $axios.onError((e) => {
     const res = e.response
-    console.log(res)
+    console.error(res)
   })
 }
